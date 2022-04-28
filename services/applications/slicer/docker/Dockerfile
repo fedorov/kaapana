@@ -6,9 +6,6 @@ LABEL CI_IGNORE="False"
 
 WORKDIR /src
 RUN mkdir -p /data
-#RUN mkdir -p /mitk
-#RUN wget https://www.mitk.org/download/kaapana/workbench/MITK-snapshots_2021-04-30-linux-x86_64.tar.gz -O /src/mitk.tar.gz && \
-#    tar -xzf /src/mitk.tar.gz --strip 1 -C /mitk/ && rm -rf /src/mitk.tar.gz
 
 # update required for libpulse-dev
 RUN apt-get update
@@ -29,12 +26,9 @@ RUN SLICER_URL="https://download.slicer.org/bitstream/60add70fae4540bf6a89bfb4" 
 
 RUN chmod -R a+w /opt/slicer
 
-## MITK original app
-# Application start definition, here a shell script is used to start the application
-#COPY files/startMITK.sh /root/Desktop/
-#RUN chmod 0777 /root/Desktop/startMITK.sh
-#RUN ln -s /data /root/Desktop/
-#WORKDIR /data
+RUN mkdir -p /root/Desktop
+RUN ln -s /data /root/Desktop/
+WORKDIR /data
 
 # A supervisord config is used to make the application managed
 COPY files/supervisord.conf /etc/supervisor/conf.d/
