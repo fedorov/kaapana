@@ -30,6 +30,8 @@ RUN apt-get update && apt-get install -y \
 
 RUN pip3 install --upgrade pip
 RUN pip3 install -U setuptools
+RUN pip3 uninstall markupsafe
+RUN pip3 install markupsafe==2.0.1
 
 WORKDIR /
 COPY files/requirements.txt ./
