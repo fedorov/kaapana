@@ -44,8 +44,5 @@ dependencies:
     repository: file://../../../../../../workflows/dag-installer/shapemodel/shapemodel-workflow
   - name: tensorboard-chart
     version: 2.5.0
-    repository: file://../../../../../../services/applications/tensorboard/tensorboard-chart
-  - name: slicer-chart
-    version: 0.1.0
-    repository: file:///home/nadya_shusharina/slicer/slicer-chart
+    repository: file://../../../../../../services/applications/tensorboard/tensorboard-chart 
     

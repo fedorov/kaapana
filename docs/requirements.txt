@@ -5,7 +5,6 @@ sphinx_rtd_theme
 sphinxcontrib-mermaid
 sphinx-tabs
 rst2pdf
-jinja2<3.1
 
 # apt requirements
 # sudo apt-get install texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended latexmk lmodern texlive-xetex
