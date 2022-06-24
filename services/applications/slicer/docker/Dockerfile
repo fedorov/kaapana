@@ -1,4 +1,4 @@
-FROM no-vnc-base:latest
+FROM registry.gitlab.com/fedorov_lab/nadya-kaapana-registry/no-vnc-base:0.1.0
 
 LABEL IMAGE="slicer"
 LABEL VERSION="0.1.0"
@@ -19,15 +19,35 @@ RUN apt-get install -y libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render
 RUN apt-get install -y libxcb-shape0 libxcb-xinerama0 
 RUN apt-get install -y libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 
 
-# Slicer 4.11.20200930
-RUN SLICER_URL="https://download.slicer.org/bitstream/60add70fae4540bf6a89bfb4" && \
+# Slicer 4.11.20200930 https://download.slicer.org/bitstream/60add70fae4540bf6a89bfb4
+# Slicer 5.0.2
+RUN SLICER_URL="https://download.slicer.org/bitstream/6286ce04e8408647b39f803a" && \
   curl -k -v -s -L $SLICER_URL | tar xz -C /tmp && \
   mv /tmp/Slicer* /opt/slicer
 
 RUN chmod -R a+w /opt/slicer
 
-RUN mkdir -p /root/Desktop
-RUN ln -s /data /root/Desktop/
+RUN useradd -m researcher -s /bin/bash && \
+    gpasswd -a researcher sudo && \
+    passwd -d researcher && passwd -u researcher && \
+    rm ~researcher/.bashrc ~researcher/.bash_logout ~researcher/.profile && \
+    sed -i -e '/^PS1/s/^/#/' /etc/bash.bashrc && \
+    sed -i -e '/stdout.*uname/s/^/#/' /etc/pam.d/login && \
+    echo 'source /etc/profile.d/prompt.sh' >> /etc/bash.bashrc
+
+
+#?? from SlicerDockers/blob/master/x11/Dockerfile
+RUN echo "allowed_users=anybody" > /etc/X11/Xwrapper.config
+
+# from SlicerDockers/blob/master/slicer/Dockerfile
+RUN su researcher -c "mkdir /home/researcher/Documents"
+
+#RUN mkdir -p /root/Desktop
+#RUN ln -s /data /root/Desktop/
+#WORKDIR /data
+
+RUN mkdir -p /home/researcher/Desktop
+RUN ln -s /data /home/researcher/Desktop/
 WORKDIR /data
 
 # A supervisord config is used to make the application managed
