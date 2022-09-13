@@ -36,6 +36,14 @@ RUN useradd -m researcher -s /bin/bash && \
     echo 'source /etc/profile.d/prompt.sh' >> /etc/bash.bashrc
 
 
+# install Slicer extension; extension name hardcoded in install-slicer-extension.py
+COPY files/install-slicer-extension.py /opt/slicer
+# see https://github.com/pieper/SlicerDockers/blob/master/slicer-plus/Dockerfile
+RUN apt-get install -y xvfb
+RUN su researcher -c "xvfb-run --auto-servernum \
+    /opt/slicer/Slicer --python-script /opt/slicer/install-slicer-extension.py --no-splash --no-main-window"
+
+
 #?? from SlicerDockers/blob/master/x11/Dockerfile
 RUN echo "allowed_users=anybody" > /etc/X11/Xwrapper.config
 
